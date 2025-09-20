@@ -127,9 +127,17 @@ body {
   color: var(--text-secondary);
   margin-bottom: 1rem;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  display: box; /* fallback for older specs */
   -webkit-box-orient: vertical;
+  box-orient: vertical;
   overflow: hidden;
+
+  /* Line clamping */
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+
+  /* Optional: ensure max height matches line count */
+  max-height: calc(1.5em * 3); /* assuming 1.5em line height */
 }
 
 .request-meta {
