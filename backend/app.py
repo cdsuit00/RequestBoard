@@ -1,23 +1,25 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from backend.extensions import db, migrate, jwt, cors
+from backend.routes import api
+from backend import models
 from backend.config import Config
-
-db = SQLAlchemy()
-migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    jwt.init_app(app)
+    cors.init_app(app)
 
-    # Import models so migrations detect them
-    from backend import models  
-
-    # Register blueprints
-    from backend.routes import api
+    # Register blueprint
     app.register_blueprint(api, url_prefix="/api")
+
+    # Ping route
+    @app.route("/api/ping")
+    def ping():
+        return {"message": "pong"}
 
     return app

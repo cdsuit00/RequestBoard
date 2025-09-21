@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 936c9a95f20b
+Revision ID: 7509e105b7eb
 Revises: 
-Create Date: 2025-09-20 18:48:16.597160
+Create Date: 2025-09-20 22:29:51.769835
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '936c9a95f20b'
+revision = '7509e105b7eb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,18 +22,19 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=80), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
+    sa.Column('password_hash', sa.String(length=255), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
     op.create_table('requests',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=120), nullable=False),
+    sa.Column('title', sa.String(length=200), nullable=False),
     sa.Column('description', sa.Text(), nullable=False),
-    sa.Column('priority', sa.String(length=20), nullable=False),
-    sa.Column('deadline', sa.DateTime(), nullable=True),
-    sa.Column('status', sa.String(length=20), nullable=True),
-    sa.Column('date_created', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('priority', sa.String(length=50), nullable=False),
+    sa.Column('deadline', sa.String(length=50), nullable=True),
+    sa.Column('status', sa.String(length=50), nullable=True),
+    sa.Column('date_created', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -41,7 +42,7 @@ def upgrade():
     op.create_table('responses',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
-    sa.Column('date_created', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('date_created', sa.DateTime(), nullable=True),
     sa.Column('request_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['request_id'], ['requests.id'], ),
     sa.PrimaryKeyConstraint('id')

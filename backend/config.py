@@ -1,9 +1,7 @@
 import os
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY", "dev_secret_key")
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", f"sqlite:///{os.path.join(os.path.dirname(__file__), 'app.db')}"
-    )
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///dev.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JSON_SORT_KEYS = False
+    SECRET_KEY = os.getenv("SECRET_KEY", "super-secret-key")
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "another-secret-key")
